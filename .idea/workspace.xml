@@ -20,15 +20,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="6d538012-f92f-483f-b3e1-d7f3fcd6b66b" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/scripts/lib/ChromaSDK.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/languages/en.json" beforeDir="false" afterPath="$PROJECT_DIR$/languages/en.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/module.json" beforeDir="false" afterPath="$PROJECT_DIR$/module.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/lib/lib.js" beforeDir="false" afterPath="$PROJECT_DIR$/styles/material-bars.scss" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/module.js" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/material-bars.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/styles/module.css" beforeDir="false" afterPath="$PROJECT_DIR$/styles/material-bars.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/styles/module.css.map" beforeDir="false" afterPath="$PROJECT_DIR$/styles/material-bars.css.map" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/styles/module.scss" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/scripts/lib/ChromaSDK.js" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/lib/ChromaSDK.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -88,7 +81,7 @@
       <workItem from="1604936394394" duration="104000" />
       <workItem from="1604936515379" duration="31000" />
       <workItem from="1604936553224" duration="1676000" />
-      <workItem from="1605808862798" duration="426000" />
+      <workItem from="1605808862798" duration="751000" />
     </task>
     <task id="LOCAL-00001" summary="Init">
       <created>1604937546780</created>
@@ -104,7 +97,14 @@
       <option name="project" value="LOCAL" />
       <updated>1604937559210</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="Init">
+      <created>1605809305435</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1605809305435</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -147,10 +147,11 @@
       <screen x="0" y="30" width="2560" height="1050" />
     </state>
     <state x="781" y="200" key="SettingsEditor/-1920.30.1920.1050/0.30.2560.1050@0.30.2560.1050" timestamp="1604937514914" />
-    <state x="872" y="288" key="Vcs.Push.Dialog.v2" timestamp="1604937729875">
+    <state x="872" y="288" key="Vcs.Push.Dialog.v2" timestamp="1605809307403">
       <screen x="0" y="30" width="2560" height="1050" />
     </state>
     <state x="872" y="288" key="Vcs.Push.Dialog.v2/-1920.30.1920.1050/0.30.2560.1050@0.30.2560.1050" timestamp="1604937729875" />
+    <state x="872" y="288" key="Vcs.Push.Dialog.v2/0.30.2560.1050@0.30.2560.1050" timestamp="1605809307403" />
     <state x="1097" y="469" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1604937720140">
       <screen x="0" y="30" width="2560" height="1050" />
     </state>
