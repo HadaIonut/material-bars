@@ -9,6 +9,7 @@ function ChromaSDK() {
 ChromaSDK.prototype = {
     uri: undefined,
     onTimer: function () {
+        if (typeof chromaSDK === 'undefined') return;
         var refThis = chromaSDK; // used on interval so this is out of scope
         if (refThis.uri == undefined) {
             return;
@@ -55,7 +56,7 @@ ChromaSDK.prototype = {
 
             var request = new XMLHttpRequest();
 
-            request.open("POST", "https://chromasdk.io:54236/razer/chromasdk", true);
+            request.open("POST", "http://localhost:54235/razer/chromasdk", true);
 
             request.setRequestHeader("content-type", "application/json");
 
