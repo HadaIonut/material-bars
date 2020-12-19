@@ -35,20 +35,11 @@ Hooks.on("updateToken", (scene, updatedToken) => {
         location = match.join('.');
     }
 
-
     const collectedTokenData = collectData(actor, updatedToken, [location, value]);
     razerAPI.showData(collectedTokenData);
 });
 
 Hooks.on("updateActor", (actor, tokenChange) => {
-
-    let value, location;
-    const changeStructure = JSON.stringify(tokenChange.data);
-    const match = changeStructure.match(/(\w+)/g);
-    value = Number(match.pop());
-    match.pop();
-    location = match.join('.');
-
-    const collectedTokenData = collectData(actor, actor.data.token, [location, value], location);
+    const collectedTokenData = collectData(actor, actor.data.token);
     razerAPI.showData(collectedTokenData);
 })

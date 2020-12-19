@@ -98,11 +98,11 @@ const getSpells = (actor) => {
  * @param actor - actor in the token
  * @param controlledToken - target token
  */
-const collectData = (actor, controlledToken, modification, location) => {
+const collectData = (actor, controlledToken, modification) => {
     const controlledTokenData = {
         bars: {
-            bar1: getBarStructure(actor, location ? location : controlledToken.bar1.attribute, modification),
-            bar2: getBarStructure(actor, location ? location : controlledToken.bar2.attribute, modification)
+            bar1: getBarStructure(actor, controlledToken.bar1.attribute, modification),
+            bar2: getBarStructure(actor, controlledToken.bar2.attribute, modification)
         },
         spells: getSpells(actor)
     };
