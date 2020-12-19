@@ -10,7 +10,8 @@
     "/scripts/material-bars.js"
   ],
   "scripts": [
-    "/scripts/lib/ChromaSDK.js"
+    "/scripts/lib/ChromaSDK.js",
+    "/scripts/api/RazerChromaAPI.js"
   ],
   "styles": [
     "/styles/material-bars.css"

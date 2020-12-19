@@ -61,14 +61,16 @@ ChromaSDK.prototype = {
             request.setRequestHeader("content-type", "application/json");
 
             var data = JSON.stringify({
-                "title": "Material Bars",
-                "description": "Razer chroma integration for FoundryVTT",
-                "author": {
-                    "name": "bmarian",
-                    "contact": "https://github.com/bmarian/material-bars"
+                title: 'Material Bars',
+                description: 'Razer chroma integration for FoundryVTT',
+                author: {
+                    name: "bmarian, HadaIonut",
+                    contact: "https://github.com/bmarian/material-bars"
                 },
-                "device_supported": ["keyboard"],
-                "category": "application"
+                device_supported: [
+                    'keyboard'
+                ],
+                category: 'application'
             });
 
             request.send(data);
