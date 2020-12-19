@@ -1,3 +1,5 @@
+import {collectData} from "./data-colection.js"
+
 // const sleep = (ms) => {
 //     const currentTime = new Date().getTime();
 //     while (currentTime + ms >= new Date().getTime()) {
@@ -36,5 +38,11 @@
 // });
 
 Hooks.once('ready', async () => {
+    CONFIG.debug.hooks = true;
     console.log('WORKS');
 });
+
+
+Hooks.on("controlToken", (controlledToken) => {
+    collectData(controlledToken);
+})
