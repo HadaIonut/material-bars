@@ -74,8 +74,6 @@ class RazerChromaAPI {
         for (let i = 0; i < limit; i++) {
             keyboardRow[i] = i < percentage ? fillColor : this._colorEmpty;
         }
-
-        this._setCustomAnimation(colors);
     }
 
     _barsAnimation(colors, bars) {
@@ -88,22 +86,66 @@ class RazerChromaAPI {
         }
     }
 
+    _determineSpellColor(spell, spellColors) {
+        const {current, max} = spell;
+        if (current === max && max === 0 || current === 0) return spellColors.EMPTY;
+        if (current === max) return spellColors.FULL;
+        if (current <= max / 3 && max / 3 > 1) return spellColors.LOW;
+        if (current <= max / 2) return spellColors.HALF;
+
+        return spellColors.FULL;
+    }
+
     _spellsAnimation(colors, spells) {
+        if (typeof ChromaAnimation === 'undefined') return;
+        const rows = ChromaAnimation.getMaxRow(EChromaSDKDevice2DEnum.DE_Keyboard);
+        const columns = ChromaAnimation.getMaxColumn(EChromaSDKDevice2DEnum.DE_Keyboard);
+
         const spellColors = {
             FULL: 0xff0000,
             HALF: 0x00ff00,
             LOW: 0x0000ff,
-            EMPTY: 0x000000,
+            EMPTY: this._colorEmpty,
+        };
+        const spellLocation = {
+            spell1: {r: rows - 2 ,c: columns - 4},
+            spell2: {r: rows - 2 ,c: columns - 3},
+            spell3: {r: rows - 2 ,c: columns - 2},
+
+            spell4: {r: rows - 3 ,c: columns - 4},
+            spell5: {r: rows - 3 ,c: columns - 3},
+            spell6: {r: rows - 3 ,c: columns - 2},
+
+            spell7: {r: rows - 4 ,c: columns - 4},
+            spell8: {r: rows - 4 ,c: columns - 3},
+            spell9: {r: rows - 4 ,c: columns - 2},
         };
 
-        this._setCustomAnimation(colors);
+
+        // make the numpad black to see the values better
+        for (let i = 0; i < rows; i++) {
+            for (let j = columns - 1; j > columns - 5; j--) {
+                colors[i][j] = spellColors.EMPTY;
+            }
+        }
+
+        for (let i = 1; i < 10; i++) {
+            const s = `spell${i}`;
+
+            const spell = spells[s];
+            const {r, c} = spellLocation[s];
+            colors[r][c] = this._determineSpellColor(spell, spellColors);
+        }
+
+        return colors;
     }
 
     _getEmptyColorsArray(baseColor = this._baseColor) {
+        if (typeof ChromaAnimation === 'undefined') return;
         const rows = ChromaAnimation.getMaxRow(EChromaSDKDevice2DEnum.DE_Keyboard);
         const columns = ChromaAnimation.getMaxColumn(EChromaSDKDevice2DEnum.DE_Keyboard);
-        const colors = new Array(rows);
 
+        const colors = new Array(rows);
         for (let i = 0; i < rows; i++) {
             colors[i] = new Array(columns);
             for (let j = 0; j < columns; j++) {
@@ -118,7 +160,9 @@ class RazerChromaAPI {
         const {bars, spells} = collectedTokenData;
         const colors = this._getEmptyColorsArray();
 
-        this._barsAnimation(colors, bars)
+        this._barsAnimation(colors, bars);
         this._spellsAnimation(colors, spells)
+
+        this._setCustomAnimation(colors);
     }
 }
