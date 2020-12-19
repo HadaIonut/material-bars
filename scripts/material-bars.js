@@ -44,5 +44,10 @@ Hooks.once('ready', async () => {
 
 
 Hooks.on("controlToken", (controlledToken) => {
-    collectData(controlledToken);
+    collectData(controlledToken.actor, controlledToken.data);
+})
+
+Hooks.on("updateToken", (scene, updatedToken) => {
+    const actor = game.actors.get(updatedToken.actorId);
+    collectData(actor, updatedToken);
 })
