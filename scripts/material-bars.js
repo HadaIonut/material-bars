@@ -18,7 +18,7 @@ Hooks.on("controlToken", (controlledToken) => {
 });
 
 Hooks.on("updateToken", (scene, updatedToken) => {
-    const actor = JSON.parse(JSON.stringify(game.actors.get(updatedToken.actorId)));
+    const actor = JSON.parse(JSON.stringify(game.actors.tokens[updatedToken._id]));
 
     let tokenChange;
     game.scenes.viewed.data.tokens.forEach((token)=> {
