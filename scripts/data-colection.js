@@ -16,6 +16,8 @@ const getBarStructure = (actor, location) => {
 
 const isPlutoniumNpc = (actor) => actor?.data?.flags?.core?.sourceId.includes("plutonium");
 
+const isWarlockNpc = (actor) => actor?.data?.data?.details?.class?.name === "warlock";
+
 /**
  * So plutonium warlock npcs have this very beautiful bug, where they get generated being able to casts spells normally
  * and this beautiful useless function is here to clear that useless info on them
@@ -25,11 +27,32 @@ const isPlutoniumNpc = (actor) => actor?.data?.flags?.core?.sourceId.includes("p
  * @param actor - owner of the spells
  */
 const fixPlutoniumWarlockNpcs = (spells, actor) => {
-    if (!isPlutoniumNpc(actor)) return;
+    if (!isPlutoniumNpc(actor) || !isWarlockNpc(actor)) return;
 
     for (let i = 1; i < 10; i++) {
         spells[`spell${i}`].max = 0;
     }
+}
+
+/**
+ * Converts the pact magic into spell slots for easier display
+ *
+ * @param spells - spells structure
+ */
+const convertPactMagic = (spells) => {
+    const pactMagic = spells.pact;
+    delete spells.pact;
+    if (pactMagic.max === 0) return;
+    const spellTarget = `spell${pactMagic.level}`;
+    spells[spellTarget].max += pactMagic.max;
+    spells[spellTarget].current += pactMagic.current;
+}
+
+const clearMistakesInSpellStructure = (spells) => {
+    Object.keys(spells).forEach((spell) => {
+        if (spells[spell].max === 0 && spells[spell].current !== 0)
+            spells[spell].max = spells[spell].current;
+    })
 }
 
 /**
@@ -56,8 +79,12 @@ const getSpells = (actor) => {
     delete spells.spell0;
     fixPlutoniumWarlockNpcs(spells, actor);
 
+    convertPactMagic(spells);
+    clearMistakesInSpellStructure(spells);
+
     return spells;
 }
+
 
 /**
  * Returns the token's resource bars and the spell slots
