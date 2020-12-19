@@ -3,15 +3,20 @@
  *
  * @param actor - owner of the data bars
  * @param location - location where the bar info is held
+ * @param modification
  */
 
-const getBarStructure = (actor, location) => {
-    const foundryStructure = getProperty(actor.data.data, location)
-    if (foundryStructure)
+const getBarStructure = (actor, location, modification) => {
+    const foundryStructure = actor.data.data ? getProperty(actor.data.data, location) : getProperty(actor.data, location);
+
+    if (foundryStructure) {
+        if (modification && modification?.[0]?.includes(location)) foundryStructure.value = modification?.[1];
         return {
             current: foundryStructure?.value,
             max: foundryStructure?.max
         }
+    }
+
 }
 
 const isPlutoniumNpc = (actor) => actor?.data?.flags?.core?.sourceId.includes("plutonium");
@@ -62,7 +67,8 @@ const clearMistakesInSpellStructure = (spells) => {
  */
 const getSpells = (actor) => {
     const spells = {};
-    const actorSpells = JSON.parse(JSON.stringify(actor.data.data.spells));
+
+    const actorSpells = actor.data.data ? JSON.parse(JSON.stringify(actor.data.data.spells)) : JSON.parse(JSON.stringify(actor.data.spells));
     Object.keys(actorSpells).forEach((spell) => {
         if (spell === 'pact')
             spells[spell] = {
@@ -92,11 +98,11 @@ const getSpells = (actor) => {
  * @param actor - actor in the token
  * @param controlledToken - target token
  */
-const collectData = (actor, controlledToken) => {
+const collectData = (actor, controlledToken, modification) => {
     const controlledTokenData = {
         bars: {
-            bar1: getBarStructure(actor, controlledToken.bar1.attribute),
-            bar2: getBarStructure(actor, controlledToken.bar2.attribute)
+            bar1: getBarStructure(actor, controlledToken.bar1.attribute, modification),
+            bar2: getBarStructure(actor, controlledToken.bar2.attribute, modification)
         },
         spells: getSpells(actor)
     };
