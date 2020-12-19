@@ -14,6 +14,24 @@ const getBarStructure = (actor, location) => {
         }
 }
 
+const isPlutoniumNpc = (actor) => actor?.data?.flags?.core?.sourceId.includes("plutonium");
+
+/**
+ * So plutonium warlock npcs have this very beautiful bug, where they get generated being able to casts spells normally
+ * and this beautiful useless function is here to clear that useless info on them
+ * It is not clean in any way, but it somewhat works
+ *
+ * @param spells - spell structure
+ * @param actor - owner of the spells
+ */
+const fixPlutoniumWarlockNpcs = (spells, actor) => {
+    if (!isPlutoniumNpc(actor)) return;
+
+    for (let i = 1; i < 10; i++) {
+        spells[`spell${i}`].max = 0;
+    }
+}
+
 /**
  * Returns a given actor's spell slots structure
  *
@@ -36,6 +54,8 @@ const getSpells = (actor) => {
             }
     })
     delete spells.spell0;
+    fixPlutoniumWarlockNpcs(spells, actor);
+
     return spells;
 }
 
