@@ -18,25 +18,29 @@ Hooks.on("controlToken", (controlledToken) => {
 });
 
 Hooks.on("updateToken", (scene, updatedToken) => {
-    const actor = JSON.parse(JSON.stringify(game.actors.tokens[updatedToken._id]));
+    const actor = game.actors.tokens[updatedToken._id] ?
+        JSON.parse(JSON.stringify(game.actors.tokens[updatedToken._id])) :
+        JSON.parse(JSON.stringify(game.actors.get(updatedToken.actorId)));
 
-    let tokenChange;
-    game.scenes.viewed.data.tokens.forEach((token)=> {
+    let tokenChange, value, location;
+    game.scenes.viewed.data.tokens.forEach((token) => {
         if (token._id === updatedToken._id)
             tokenChange = token.actorData;
     })
-    const changeStructure = JSON.stringify(tokenChange);
-    const match = changeStructure.match(/(\w+)/g);
-    const value = Number(match.pop());
-    match.pop();
-    const location = match.join('.');
+    if (Object.keys(tokenChange).length !== 0) {
+        const changeStructure = JSON.stringify(tokenChange);
+        const match = changeStructure.match(/(\w+)/g);
+        value = Number(match.pop());
+        match.pop();
+        location = match.join('.');
+    }
+
 
     const collectedTokenData = collectData(actor, updatedToken, [location, value]);
     razerAPI.showData(collectedTokenData);
 });
 
 Hooks.on("updateActor", (actor) => {
-    const token = JSON.parse(JSON.stringify(actor.data.token));
-    const collectedTokenData = collectData(actor, token);
+    const collectedTokenData = collectData(actor, actor.data.token);
     razerAPI.showData(collectedTokenData);
 })
