@@ -4,7 +4,8 @@ var chromaSDK = undefined;
 
 class RazerChromaAPI {
     constructor() {
-        this.FVTTOrange = 0x0064ff;
+        this.ColorFVTTOrange = 0x0064ff;
+        this.ColorEmpty = 0x000000;
 
         this._init();
     }
@@ -46,13 +47,69 @@ class RazerChromaAPI {
         const staticColorAnimation = () => {
             ChromaAnimation.staticColor(
                 EChromaSDKDeviceEnum.DE_Keyboard,
-                this.FVTTOrange
+                this.ColorFVTTOrange
             );
         };
 
         // this is needed because... reasons... one of them being
         // that the init function DOESN'T TELL ME WHEN IT'S DONE!
         // what year is it? 1990?
-        setTimeout(staticColorAnimation , 3000);
+        setTimeout(staticColorAnimation, 3000);
+    }
+
+    _setCustomAnimation(colors) {
+        if (typeof ChromaAnimation === 'undefined') return;
+        ChromaAnimation.custom(EChromaSDKDeviceEnum.DE_Keyboard, colors);
+    }
+
+    _displayBar(colors, bar, row, limit, fillColor) {
+        const keyboardRow = colors[row];
+        const {current, max} = bar;
+        if (!current || !max || !keyboardRow) return;
+
+        const percentage = Math.round((current / max) * limit);
+
+        for (let i = 0; i < limit; i++) {
+            keyboardRow[i] = i < percentage ? fillColor : this.ColorEmpty;
+        }
+
+        this._setCustomAnimation(colors);
+    }
+
+    _barsAnimation(colors, bars) {
+        if (typeof bars.bar1 !== 'undefined') {
+            this._displayBar(colors, bars.bar1, 0, 15, 0x0000ff);
+        }
+
+        if (typeof bars.bar2 !== 'undefined') {
+            this._displayBar(colors, bars.bar2, 1, 15, 0x00ff00);
+        }
+    }
+
+    _spellsAnimation(colors, spells) {
+        this._setCustomAnimation(colors);
+    }
+
+    _getEmptyColorsArray(baseColor = this.ColorFVTTOrange) {
+        const rows = ChromaAnimation.getMaxRow(EChromaSDKDevice2DEnum.DE_Keyboard);
+        const columns = ChromaAnimation.getMaxColumn(EChromaSDKDevice2DEnum.DE_Keyboard);
+        const colors = new Array(rows);
+
+        for (let i = 0; i < rows; i++) {
+            colors[i] = new Array(columns);
+            for (let j = 0; j < columns; j++) {
+                colors[i][j] = baseColor;
+            }
+        }
+
+        return colors;
+    }
+
+    showData(collectedTokenData) {
+        const {bars, spells} = collectedTokenData;
+        const colors = this._getEmptyColorsArray();
+
+        this._barsAnimation(colors, bars)
+        this._spellsAnimation(colors, spells)
     }
 }
