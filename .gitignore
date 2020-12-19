@@ -1,0 +1,7 @@
+@types
+.github
+.idea
+
+@types/*
+.github/*
+.idea/*
