@@ -6,7 +6,7 @@ Hooks.once('init', () => {
 });
 
 Hooks.once('ready', async () => {
-    // CONFIG.debug.hooks = true;
+    CONFIG.debug.hooks = true;
     console.log('WORKS');
 });
 

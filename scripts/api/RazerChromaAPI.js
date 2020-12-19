@@ -4,8 +4,10 @@ var chromaSDK = undefined;
 
 class RazerChromaAPI {
     constructor() {
-        this.ColorFVTTOrange = 0x0064ff;
-        this.ColorEmpty = 0x000000;
+        this._colorFVTTOrange = 0x0064ff;
+        this._baseColor = 0xffffff;
+        this._colorEmpty = 0x000000;
+        this._delayBeforeBaseAnimation = 1000;
 
         this._init();
     }
@@ -16,7 +18,7 @@ class RazerChromaAPI {
     _init() {
         chromaSDK = chromaSDK || new ChromaSDK();
         chromaSDK.init();
-        this._staticBackground();
+        this._staticBackground(this._baseColor);
 
         window.addEventListener('beforeunload', () => {
             this._clearAllAnimations();
@@ -43,18 +45,18 @@ class RazerChromaAPI {
     // this is EXTREMELY IMPORTANT, to not hurt the RazerAPI's feelings
     // we need to provide it with constant messages that we are here
     // and we will not leave...
-    _staticBackground() {
+    _staticBackground(color) {
         const staticColorAnimation = () => {
             ChromaAnimation.staticColor(
                 EChromaSDKDeviceEnum.DE_Keyboard,
-                this.ColorFVTTOrange
+                color
             );
         };
 
         // this is needed because... reasons... one of them being
         // that the init function DOESN'T TELL ME WHEN IT'S DONE!
         // what year is it? 1990?
-        setTimeout(staticColorAnimation, 3000);
+        setTimeout(staticColorAnimation, this._delayBeforeBaseAnimation);
     }
 
     _setCustomAnimation(colors) {
@@ -70,7 +72,7 @@ class RazerChromaAPI {
         const percentage = Math.round((current / max) * limit);
 
         for (let i = 0; i < limit; i++) {
-            keyboardRow[i] = i < percentage ? fillColor : this.ColorEmpty;
+            keyboardRow[i] = i < percentage ? fillColor : this._colorEmpty;
         }
 
         this._setCustomAnimation(colors);
@@ -78,19 +80,26 @@ class RazerChromaAPI {
 
     _barsAnimation(colors, bars) {
         if (typeof bars.bar1 !== 'undefined') {
-            this._displayBar(colors, bars.bar1, 0, 15, 0x0000ff);
+            this._displayBar(colors, bars.bar1, 1, 15, 0x0000ff);
         }
 
         if (typeof bars.bar2 !== 'undefined') {
-            this._displayBar(colors, bars.bar2, 1, 15, 0x00ff00);
+            this._displayBar(colors, bars.bar2, 0, 15, 0xff0000);
         }
     }
 
     _spellsAnimation(colors, spells) {
+        const spellColors = {
+            FULL: 0xff0000,
+            HALF: 0x00ff00,
+            LOW: 0x0000ff,
+            EMPTY: 0x000000,
+        };
+
         this._setCustomAnimation(colors);
     }
 
-    _getEmptyColorsArray(baseColor = this.ColorFVTTOrange) {
+    _getEmptyColorsArray(baseColor = this._baseColor) {
         const rows = ChromaAnimation.getMaxRow(EChromaSDKDevice2DEnum.DE_Keyboard);
         const columns = ChromaAnimation.getMaxColumn(EChromaSDKDevice2DEnum.DE_Keyboard);
         const colors = new Array(rows);
