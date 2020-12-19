@@ -108,23 +108,23 @@ class RazerChromaAPI {
             EMPTY: this._colorEmpty,
         };
         const spellLocation = {
-            spell1: {r: rows - 2 ,c: columns - 4},
-            spell2: {r: rows - 2 ,c: columns - 3},
-            spell3: {r: rows - 2 ,c: columns - 2},
+            spell1: {r: rows - 2, c: columns - 4},
+            spell2: {r: rows - 2, c: columns - 3},
+            spell3: {r: rows - 2, c: columns - 2},
 
-            spell4: {r: rows - 3 ,c: columns - 4},
-            spell5: {r: rows - 3 ,c: columns - 3},
-            spell6: {r: rows - 3 ,c: columns - 2},
+            spell4: {r: rows - 3, c: columns - 4},
+            spell5: {r: rows - 3, c: columns - 3},
+            spell6: {r: rows - 3, c: columns - 2},
 
-            spell7: {r: rows - 4 ,c: columns - 4},
-            spell8: {r: rows - 4 ,c: columns - 3},
-            spell9: {r: rows - 4 ,c: columns - 2},
+            spell7: {r: rows - 4, c: columns - 4},
+            spell8: {r: rows - 4, c: columns - 3},
+            spell9: {r: rows - 4, c: columns - 2},
         };
 
 
         // make the numpad black to see the values better
-        for (let i = 0; i < rows; i++) {
-            for (let j = columns - 1; j > columns - 5; j--) {
+        for (let i = 2; i < rows - 1; i++) {
+            for (let j = columns - 2; j > columns - 5; j--) {
                 colors[i][j] = spellColors.EMPTY;
             }
         }
