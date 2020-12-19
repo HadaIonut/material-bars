@@ -40,7 +40,15 @@ Hooks.on("updateToken", (scene, updatedToken) => {
     razerAPI.showData(collectedTokenData);
 });
 
-Hooks.on("updateActor", (actor) => {
-    const collectedTokenData = collectData(actor, actor.data.token);
+Hooks.on("updateActor", (actor, tokenChange) => {
+
+    let value, location;
+    const changeStructure = JSON.stringify(tokenChange.data);
+    const match = changeStructure.match(/(\w+)/g);
+    value = Number(match.pop());
+    match.pop();
+    location = match.join('.');
+
+    const collectedTokenData = collectData(actor, actor.data.token, [location, value], location);
     razerAPI.showData(collectedTokenData);
 })
