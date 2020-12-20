@@ -7,7 +7,7 @@
 A module that uses the Razer ChromaAPI to display some information directly on a chroma enabled keyboard.
 
 
-After the Foundry D20 Hekathon this module supports displaying the 2 available bars for a tokan, 
+After the Foundry D20 Hekathon this module supports displaying the 2 available bars for a token, 
 and using the numpad as a display for the ammount of spells left.
 
 ![](https://i.imgur.com/KnXb0Z6.gif)
