@@ -24,6 +24,6 @@
     }
   ],
   "url": "https://github.com/bmarian/material-bars",
-  "manifest": "https://raw.githubusercontent.com/bmarian/material-bars/master/src/module.json",
+  "manifest": "https://raw.githubusercontent.com/bmarian/material-bars/master/module.json",
   "download": "https://github.com/bmarian/material-bars/releases/download/0.0.1/module.zip"
 }
