@@ -1,11 +1,11 @@
 {
   "name": "material-bars",
   "title": "Material Bars",
-  "description": "",
+  "description": "Razer chroma integration for FoundryVTT",
   "version": "0.0.1",
   "minimumCoreVersion": "0.7.6",
   "compatibleCoreVersion": "0.7.6",
-  "author": "bmarian",
+  "author": "bmarian, HadaIonut",
   "esmodules": [
     "/scripts/material-bars.js"
   ],
