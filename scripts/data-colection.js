@@ -19,7 +19,7 @@ const getBarStructure = (actor, location, modification) => {
 
 }
 
-const isPlutoniumNpc = (actor) => actor?.data?.flags?.core?.sourceId.includes("plutonium");
+const isPlutoniumNpc = (actor) => actor?.data?.flags?.core?.sourceId?.includes("plutonium");
 
 const isWarlockNpc = (actor) => actor?.data?.data?.details?.class?.name === "warlock";
 
