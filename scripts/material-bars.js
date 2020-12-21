@@ -7,14 +7,13 @@ Hooks.once('init', () => {
 });
 
 Hooks.once('ready', async () => {
-    CONFIG.debug.hooks = true;
-    console.log('WORKS');
+    // CONFIG.debug.hooks = true;
 });
 
 
 Hooks.on("controlToken", (controlledToken, selected) => {
     const collectedTokenData = collectData(controlledToken.actor, controlledToken.data, !selected);
-    razerAPI.showData(collectedTokenData);
+    razerAPI.createConstantAnimation(collectedTokenData);
 });
 
 Hooks.on("updateToken", (scene, updatedToken) => {
@@ -24,7 +23,7 @@ Hooks.on("updateToken", (scene, updatedToken) => {
     })
 
     const collectedTokenData = collectData(token.actor, token.data, false);
-    razerAPI.showData(collectedTokenData);
+    razerAPI.createConstantAnimation(collectedTokenData);
 });
 
 Hooks.on("updateActor", (actor, actorChange) => {
@@ -34,5 +33,5 @@ Hooks.on("updateActor", (actor, actorChange) => {
     })
 
     const collectedTokenData = collectData(token.actor, token.data, false);
-    razerAPI.showData(collectedTokenData);
+    razerAPI.createConstantAnimation(collectedTokenData);
 })

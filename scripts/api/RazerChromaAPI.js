@@ -1,168 +1,223 @@
-// don't you just hate it when the api is so old and bad that
-// IT NEEDS A GLOBAL VARIABLE ?
 var chromaSDK = undefined;
 
-class RazerChromaAPI {
+class RazerChromaAPI extends GenericAPI {
     constructor() {
-        this._colorFVTTOrange = 0x0064ff;
-        this._baseColor = 0xffffff;
-        this._colorEmpty = 0x000000;
-        this._delayBeforeBaseAnimation = 1000;
-
+        super('NUMBER');
         this._init();
     }
 
-    // we need to initialize the global variable and to add an event
-    // to tell the RazerAPI that we will go to get milk from the closest shop
-    // but we will be back soon enough
-    _init() {
-        chromaSDK = chromaSDK || new ChromaSDK();
-        chromaSDK.init();
-        this._staticBackground(this._baseColor);
-
-        window.addEventListener('beforeunload', () => {
-            this._clearAllAnimations();
-            this._uninit();
-        });
-    }
-
-    // this tells the RazerAPI that we will be gone for milk
-    // without this the RazerSynapse will wait for us 10 seconds
-    // then assume we will be gone for milk
+    /**
+     * Disconnects from the RazerAPI
+     *
+     * @private
+     */
     _uninit() {
         if (typeof chromaSDK === 'undefined') return;
         chromaSDK.uninit();
     }
 
-    // this clears all the nice colors... I hope...
+    /**
+     * Stops all the currently running animations
+     *
+     * @private
+     */
     _clearAllAnimations() {
         if (typeof ChromaAnimation === 'undefined') return;
         ChromaAnimation.stopAll();
         ChromaAnimation.clearAll();
     }
 
-    // a static animation with the foundry orange
-    // this is EXTREMELY IMPORTANT, to not hurt the RazerAPI's feelings
-    // we need to provide it with constant messages that we are here
-    // and we will not leave...
-    _staticBackground(color) {
-        const staticColorAnimation = () => {
-            ChromaAnimation.staticColor(
-                EChromaSDKDeviceEnum.DE_Keyboard,
-                color
-            );
-        };
+    /**
+     * Creates a 'static' background
+     *
+     * @param {number} [color=this.getBaseColor()] - the background color displayed for
+     *                                               all the keys with no function
+     * @private
+     */
+    _staticBackground(color = this.getBaseColor()) {
+        const staticColorAnimation = () =>
+            ChromaAnimation.staticColor(EChromaSDKDeviceEnum.DE_Keyboard, color);
 
-        // this is needed because... reasons... one of them being
-        // that the init function DOESN'T TELL ME WHEN IT'S DONE!
-        // what year is it? 1990?
-        setTimeout(staticColorAnimation, this._delayBeforeBaseAnimation);
+        setTimeout(staticColorAnimation, this._constants.DELAY_BEFORE_BASE_ANIMATION);
     }
 
+    /**
+     * Creates a JSON with all the constants needed
+     *
+     * @private
+     */
+    _createConstants() {
+        const hasDeviceEnum = typeof EChromaSDKDeviceEnum !== 'undefined';
+        const hasChromaAnimation = typeof ChromaAnimation !== 'undefined';
+        const hasDevice2DEnum = typeof EChromaSDKDevice2DEnum !== 'undefined';
+
+        const KEYBOARD = hasDeviceEnum ? EChromaSDKDeviceEnum.DE_Keyboard : 2;
+        const KEYBOARD_ROWS = hasChromaAnimation && hasDevice2DEnum ? ChromaAnimation.getMaxRow(EChromaSDKDevice2DEnum.DE_Keyboard) : 22;
+        const KEYBOARD_COLS = hasChromaAnimation && hasDevice2DEnum ? ChromaAnimation.getMaxColumn(EChromaSDKDevice2DEnum.DE_Keyboard) : 6;
+
+        this._constants = {
+            DELAY_BEFORE_BASE_ANIMATION: 1000,
+            KEYBOARD,
+            KEYBOARD_ROWS,
+            KEYBOARD_COLS,
+            KEYBOARD_BARS_LENGTH: 15,
+            KEYBOARD_BAR1_ROW: 1,
+            KEYBOARD_BAR2_ROW: 0,
+        };
+    }
+
+    /**
+     * Crate a new chromaSDK and establishes a connection,
+     * creates a JSON with all the constants needed,
+     * starts the static animation,
+     * adds an event on `beforeunload` where we stop all the animations
+     * and disconnect
+     *
+     * @private
+     */
+    _init() {
+        chromaSDK = chromaSDK || new ChromaSDK();
+        chromaSDK.init();
+
+        this._createConstants();
+        this._staticBackground();
+        window.addEventListener('beforeunload', () => {
+            this._clearAllAnimations();
+            this._uninit();
+        });
+    }
+
+    /**
+     * Creates a new custom animation
+     *
+     * @param {number[][]} colors - an array with colors for every button on a keyboard
+     * @private
+     */
     _setCustomAnimation(colors) {
         if (typeof ChromaAnimation === 'undefined') return;
-        ChromaAnimation.custom(EChromaSDKDeviceEnum.DE_Keyboard, colors);
+        ChromaAnimation.custom(this._constants.KEYBOARD, colors);
     }
 
-    _displayBar(colors, bar, row, limit, fillColor) {
-        const keyboardRow = colors[row];
+    /**
+     * Returns a base array with all the keys having the base color
+     *
+     * @param {number} color - the base color that will fill the keyboard
+     * @return {number[][]}
+     * @private
+     */
+    _getBaseKeyboardArray(color = this.getBaseColor()) {
+        const rows = this._constants.KEYBOARD_ROWS;
+        const cols = this._constants.KEYBOARD_COLS;
+
+        return Array(rows).fill(0).map((_) => Array(cols).fill(color));
+    }
+
+    /**
+     * Returns an array with colors for a bar display
+     *
+     * @param {*} bar - information for a bar
+     * @param {number} barColor - the color that the bar should have
+     * @param {number[][]} colors - an array with colors for every key
+     * @param {number} position - the row where we should show the bar
+     * @param {number} maxLength - the length of the bar
+     * @return {number[][]}
+     * @private
+     */
+    _getBarAnimation(bar, barColor, colors, position, maxLength) {
+        const barColors = [...colors];
+        const row = barColors[position];
         const {current, max} = bar;
-        if (!current || !max || !keyboardRow) return;
 
-        const percentage = Math.round((current / max) * limit);
+        const numberOfKeysToLight = Math.ceil((current / max) * maxLength);
 
-        for (let i = 0; i < limit; i++) {
-            keyboardRow[i] = i < percentage ? fillColor : this._colorEmpty;
+        for (let i = 0; i < maxLength; i++) {
+            row[i] = i <= numberOfKeysToLight ? barColor : this.getEmptyColor();
         }
+        return barColors;
     }
 
-    _barsAnimation(colors, bars) {
-        if (typeof bars.bar1 !== 'undefined') {
-            this._displayBar(colors, bars.bar1, 1, 15, 0x0000ff);
-        }
+    /**
+     * Returns an array with colors for the bars display
+     *
+     * @param {*} bars - information for the two bars
+     * @param {number[][]} colors - an array with colors for every key
+     * @return {number[][]}
+     * @private
+     */
+    _getBarsAnimation(bars, colors) {
+        const hasBar1 = typeof bars.bar1 !== 'undefined';
+        const hasBar2 = typeof bars.bar2 !== 'undefined';
 
-        if (typeof bars.bar2 !== 'undefined') {
-            this._displayBar(colors, bars.bar2, 0, 15, 0xff0000);
-        }
+        const bar1Colors = hasBar1
+            ? this._getBarAnimation(
+                bars.bar1,
+                this.getBar1Color(bars.bar1),
+                colors,
+                this._constants.KEYBOARD_BAR1_ROW,
+                this._constants.KEYBOARD_BARS_LENGTH
+            )
+            : colors;
+        return hasBar2
+            ? this._getBarAnimation(
+                bars.bar2,
+                this.getBar2Color(bars.bar2),
+                bar1Colors,
+                this._constants.KEYBOARD_BAR2_ROW,
+                this._constants.KEYBOARD_BARS_LENGTH
+            )
+            : bar1Colors;
     }
 
-    _determineSpellColor(spell, spellColors) {
-        const {current, max} = spell;
-        if (current === max && max === 0 || current === 0) return spellColors.EMPTY;
-        if (current === max) return spellColors.FULL;
-        if (current <= max / 3 && max / 3 > 1) return spellColors.LOW;
-        if (current <= max / 2) return spellColors.HALF;
+    /**
+     * Returns an array with colors for every spell slot
+     *
+     * @param {*} spells - information for every spell slot
+     * @param {number[][]} colors - an array with colors for every key
+     * @return {number[][]}
+     * @private
+     */
+    _getSpellsAnimation(spells, colors) {
+        const spellsColors = [...colors];
+        const rows = this._constants.KEYBOARD_ROWS;
+        const cols = this._constants.KEYBOARD_COLS;
 
-        return spellColors.FULL;
-    }
-
-    _spellsAnimation(colors, spells) {
-        if (typeof ChromaAnimation === 'undefined') return;
-        const rows = ChromaAnimation.getMaxRow(EChromaSDKDevice2DEnum.DE_Keyboard);
-        const columns = ChromaAnimation.getMaxColumn(EChromaSDKDevice2DEnum.DE_Keyboard);
-
-        const spellColors = {
-            FULL: 0xff0000,
-            HALF: 0x00ff00,
-            LOW: 0x0000ff,
-            EMPTY: this._colorEmpty,
-        };
         const spellLocation = {
-            spell1: {r: rows - 2, c: columns - 4},
-            spell2: {r: rows - 2, c: columns - 3},
-            spell3: {r: rows - 2, c: columns - 2},
+            spell1: {r: rows - 2, c: cols - 4},
+            spell2: {r: rows - 2, c: cols - 3},
+            spell3: {r: rows - 2, c: cols - 2},
 
-            spell4: {r: rows - 3, c: columns - 4},
-            spell5: {r: rows - 3, c: columns - 3},
-            spell6: {r: rows - 3, c: columns - 2},
+            spell4: {r: rows - 3, c: cols - 4},
+            spell5: {r: rows - 3, c: cols - 3},
+            spell6: {r: rows - 3, c: cols - 2},
 
-            spell7: {r: rows - 4, c: columns - 4},
-            spell8: {r: rows - 4, c: columns - 3},
-            spell9: {r: rows - 4, c: columns - 2},
+            spell7: {r: rows - 4, c: cols - 4},
+            spell8: {r: rows - 4, c: cols - 3},
+            spell9: {r: rows - 4, c: cols - 2},
         };
 
-
-        // make the numpad black to see the values better
-        for (let i = 2; i < rows - 1; i++) {
-            for (let j = columns - 2; j > columns - 5; j--) {
-                colors[i][j] = spellColors.EMPTY;
-            }
-        }
-
-        for (let i = 1; i < 10; i++) {
+        for (let i = 1; i <= 9; i++) {
             const s = `spell${i}`;
-
             const spell = spells[s];
             const {r, c} = spellLocation[s];
-            colors[r][c] = this._determineSpellColor(spell, spellColors);
+
+            spellsColors[r][c] = this.getSpellColor(spell);
         }
 
-        return colors;
+        return spellsColors;
     }
 
-    _getEmptyColorsArray(baseColor = this._baseColor) {
-        if (typeof ChromaAnimation === 'undefined') return;
-        const rows = ChromaAnimation.getMaxRow(EChromaSDKDevice2DEnum.DE_Keyboard);
-        const columns = ChromaAnimation.getMaxColumn(EChromaSDKDevice2DEnum.DE_Keyboard);
+    /**
+     * Creates a persistent animation on the keyboard
+     *
+     * @param {*} data - data needed for the animation
+     * @abstract
+     */
+    createConstantAnimation(data) {
+        const {bars, spells} = data;
+        const baseColors = this._getBaseKeyboardArray();
+        const barsColors = this._getBarsAnimation(bars, baseColors);
+        const spellsColors = this._getSpellsAnimation(spells, barsColors);
 
-        const colors = new Array(rows);
-        for (let i = 0; i < rows; i++) {
-            colors[i] = new Array(columns);
-            for (let j = 0; j < columns; j++) {
-                colors[i][j] = baseColor;
-            }
-        }
-
-        return colors;
-    }
-
-    showData(collectedTokenData) {
-        const {bars, spells} = collectedTokenData;
-        const colors = this._getEmptyColorsArray();
-
-        this._barsAnimation(colors, bars);
-        this._spellsAnimation(colors, spells)
-
-        this._setCustomAnimation(colors);
+        this._setCustomAnimation(spellsColors);
     }
 }

@@ -2,7 +2,7 @@
   "name": "material-bars",
   "title": "Material Bars",
   "description": "Razer chroma integration for FoundryVTT",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "minimumCoreVersion": "0.7.6",
   "compatibleCoreVersion": "0.7.6",
   "author": "bmarian, HadaIonut",
@@ -11,6 +11,7 @@
   ],
   "scripts": [
     "/scripts/lib/ChromaSDK.js",
+    "/scripts/api/GenericAPI.js",
     "/scripts/api/RazerChromaAPI.js"
   ],
   "styles": [
@@ -25,5 +26,5 @@
   ],
   "url": "https://github.com/bmarian/material-bars",
   "manifest": "https://raw.githubusercontent.com/bmarian/material-bars/master/module.json",
-  "download": "https://github.com/bmarian/material-bars/releases/download/0.0.1/module.zip"
+  "download": "https://github.com/bmarian/material-bars/releases/download/0.0.2/module.zip"
 }

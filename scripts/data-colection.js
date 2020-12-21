@@ -124,7 +124,6 @@ const collectData = (actor, controlledToken, empty) => {
         empty: empty
     };
 
-    console.log(controlledTokenData);
     return controlledTokenData;
 }
 
