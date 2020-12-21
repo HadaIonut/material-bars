@@ -3,14 +3,12 @@
  *
  * @param actor - owner of the data bars
  * @param location - location where the bar info is held
- * @param modification
  */
 
-const getBarStructure = (actor, location, modification) => {
+const getBarStructure = (actor, location) => {
     const foundryStructure = actor.data.data ? getProperty(actor.data.data, location) : getProperty(actor.data, location);
 
     if (foundryStructure) {
-        if (modification && modification?.[0]?.includes(location)) foundryStructure.value = modification?.[1];
         return {
             current: foundryStructure?.value,
             max: foundryStructure?.max
@@ -19,19 +17,15 @@ const getBarStructure = (actor, location, modification) => {
 
 }
 
-const isPlutoniumNpc = (actor) => actor?.data?.flags?.core?.sourceId?.includes("plutonium");
-
-const isWarlockNpc = (actor) => actor?.data?.data?.details?.class?.name === "warlock";
-
 /**
- * So plutonium warlock npcs have this very beautiful bug, where they get generated being able to casts spells normally
+ * So warlock npcs have this very beautiful bug, where they get generated being able to casts spells normally
  * and this beautiful useless function is here to clear that useless info on them
  * It is not clean in any way, but it somewhat works
  *
  * @param spells - spell structure
  * @param actor - owner of the spells
  */
-const fixPlutoniumWarlockNpcs = (spells, actor) => {
+const fixPactMagic = (spells, actor) => {
     if (!isPlutoniumNpc(actor) || !isWarlockNpc(actor)) return;
 
     for (let i = 1; i < 10; i++) {
@@ -83,7 +77,7 @@ const getSpells = (actor) => {
             }
     })
     delete spells.spell0;
-    fixPlutoniumWarlockNpcs(spells, actor);
+    fixPactMagic(spells, actor);
 
     convertPactMagic(spells);
     clearMistakesInSpellStructure(spells);
@@ -98,11 +92,11 @@ const getSpells = (actor) => {
  * @param actor - actor in the token
  * @param controlledToken - target token
  */
-const collectData = (actor, controlledToken, modification) => {
+const collectData = (actor, controlledToken, ) => {
     const controlledTokenData = {
         bars: {
-            bar1: getBarStructure(actor, controlledToken.bar1.attribute, modification),
-            bar2: getBarStructure(actor, controlledToken.bar2.attribute, modification)
+            bar1: getBarStructure(actor, controlledToken.bar1.attribute),
+            bar2: getBarStructure(actor, controlledToken.bar2.attribute)
         },
         spells: getSpells(actor)
     };
