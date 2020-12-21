@@ -17,6 +17,11 @@ const getBarStructure = (actor, location) => {
 
 }
 
+/**
+ * Returns true the actor has no more spells
+ *
+ * @param spells - spells list
+ */
 const hasNoCurrentSpells = (spells) => {
     const spellTypes = Object.keys(spells);
     spellTypes.splice(spellTypes.indexOf('pact'), 1);
@@ -58,6 +63,11 @@ const convertPactMagic = (spells) => {
     spells[spellTarget].current += pactMagic.current;
 }
 
+/**
+ * In case any actor has 0 max spell slots and !0 current spell slots it modifies the spells object to have max === current
+ *
+ * @param spells - spells object
+ */
 const clearMistakesInSpellStructure = (spells) => {
     Object.keys(spells).forEach((spell) => {
         if (spells[spell].max === 0 && spells[spell].current !== 0)
@@ -66,7 +76,7 @@ const clearMistakesInSpellStructure = (spells) => {
 }
 
 /**
- * Returns a given actor's spell slots structure
+ * Returns a given actor's spell slots structure, except cantrips
  *
  * @param actor
  */
@@ -102,7 +112,7 @@ const getSpells = (actor) => {
  *
  * @param actor - actor in the token
  * @param controlledToken - target token
- * @param empty
+ * @param empty - true if the keyboard shouldn't display anything, false if it should display data
  */
 const collectData = (actor, controlledToken, empty) => {
     const controlledTokenData = {
