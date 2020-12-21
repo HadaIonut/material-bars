@@ -64,8 +64,6 @@ class RazerChromaAPI extends GenericAPI {
             KEYBOARD_BAR1_ROW: 1,
             KEYBOARD_BAR2_ROW: 0,
         };
-
-        console.log(this._constants);
     }
 
     /**
@@ -131,7 +129,6 @@ class RazerChromaAPI extends GenericAPI {
         const {current, max} = bar;
 
         const numberOfKeysToLight = Math.ceil((current / max) * maxLength);
-        console.log(numberOfKeysToLight);
 
         for (let i = 0; i < maxLength; i++) {
             row[i] = i <= numberOfKeysToLight ? barColor : this.getEmptyColor();
