@@ -4,14 +4,10 @@
 ![GitHub Latest Release](https://img.shields.io/github/release/bmarian/material-bars?style=for-the-badge)
 ![Foundry Version](https://img.shields.io/badge/FoundryVTT-0.7.6-blueviolet?style=for-the-badge)
 
-An example of integrating the razer chroma API with FoundryVTT.
+A module that uses the Razer ChromaAPI to display some information directly on a chroma enabled keyboard.
 
-# Installation
-- Go in the `Add-on Modules` section
-- Click `Install Module`
-- And search for Material Bars
 
-# Settings
+After the Foundry D20 Hekathon this module supports displaying the 2 available bars for a token, 
+and using the numpad as a display for the ammount of spells left.
 
-# Examples
-
+![](https://i.imgur.com/KnXb0Z6.gif)

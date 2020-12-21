@@ -3,14 +3,12 @@
  *
  * @param actor - owner of the data bars
  * @param location - location where the bar info is held
- * @param modification
  */
 
-const getBarStructure = (actor, location, modification) => {
+const getBarStructure = (actor, location) => {
     const foundryStructure = actor.data.data ? getProperty(actor.data.data, location) : getProperty(actor.data, location);
 
     if (foundryStructure) {
-        if (modification && modification?.[0]?.includes(location)) foundryStructure.value = modification?.[1];
         return {
             current: foundryStructure?.value,
             max: foundryStructure?.max
@@ -19,20 +17,32 @@ const getBarStructure = (actor, location, modification) => {
 
 }
 
-const isPlutoniumNpc = (actor) => actor?.data?.flags?.core?.sourceId?.includes("plutonium");
+/**
+ * Returns true the actor has no more spells
+ *
+ * @param spells - spells list
+ */
+const hasNoCurrentSpells = (spells) => {
+    const spellTypes = Object.keys(spells);
+    spellTypes.splice(spellTypes.indexOf('pact'), 1);
 
-const isWarlockNpc = (actor) => actor?.data?.data?.details?.class?.name === "warlock";
+    const remainingSpells = spellTypes.reduce((accumulator, reducer) => spells[accumulator]?.current + spells[reducer]?.current);
+
+    return remainingSpells === 0;
+}
+
+const hasPactMagic = (spells) => spells.pact.current !== 0;
 
 /**
- * So plutonium warlock npcs have this very beautiful bug, where they get generated being able to casts spells normally
+ * So warlock npcs have this very beautiful bug, where they get generated being able to casts spells normally
  * and this beautiful useless function is here to clear that useless info on them
  * It is not clean in any way, but it somewhat works
  *
  * @param spells - spell structure
  * @param actor - owner of the spells
  */
-const fixPlutoniumWarlockNpcs = (spells, actor) => {
-    if (!isPlutoniumNpc(actor) || !isWarlockNpc(actor)) return;
+const fixPactMagic = (spells, actor) => {
+    if (!(hasNoCurrentSpells(spells) && hasPactMagic(spells))) return;
 
     for (let i = 1; i < 10; i++) {
         spells[`spell${i}`].max = 0;
@@ -53,6 +63,11 @@ const convertPactMagic = (spells) => {
     spells[spellTarget].current += pactMagic.current;
 }
 
+/**
+ * In case any actor has 0 max spell slots and !0 current spell slots it modifies the spells object to have max === current
+ *
+ * @param spells - spells object
+ */
 const clearMistakesInSpellStructure = (spells) => {
     Object.keys(spells).forEach((spell) => {
         if (spells[spell].max === 0 && spells[spell].current !== 0)
@@ -61,7 +76,7 @@ const clearMistakesInSpellStructure = (spells) => {
 }
 
 /**
- * Returns a given actor's spell slots structure
+ * Returns a given actor's spell slots structure, except cantrips
  *
  * @param actor
  */
@@ -83,7 +98,7 @@ const getSpells = (actor) => {
             }
     })
     delete spells.spell0;
-    fixPlutoniumWarlockNpcs(spells, actor);
+    fixPactMagic(spells, actor);
 
     convertPactMagic(spells);
     clearMistakesInSpellStructure(spells);
@@ -97,14 +112,16 @@ const getSpells = (actor) => {
  *
  * @param actor - actor in the token
  * @param controlledToken - target token
+ * @param empty - true if the keyboard shouldn't display anything, false if it should display data
  */
-const collectData = (actor, controlledToken, modification) => {
+const collectData = (actor, controlledToken, empty) => {
     const controlledTokenData = {
         bars: {
-            bar1: getBarStructure(actor, controlledToken.bar1.attribute, modification),
-            bar2: getBarStructure(actor, controlledToken.bar2.attribute, modification)
+            bar1: getBarStructure(actor, controlledToken.bar1.attribute),
+            bar2: getBarStructure(actor, controlledToken.bar2.attribute)
         },
-        spells: getSpells(actor)
+        spells: getSpells(actor),
+        empty: empty
     };
 
     console.log(controlledTokenData);
