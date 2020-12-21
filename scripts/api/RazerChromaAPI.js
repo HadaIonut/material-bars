@@ -160,7 +160,7 @@ class RazerChromaAPI extends GenericAPI {
         return hasBar2
             ? this._getBarAnimation(
                 bars.bar2,
-                this.getBar2Color(bars.bar1),
+                this.getBar2Color(bars.bar2),
                 bar1Colors,
                 this._constants.KEYBOARD_BAR2_ROW,
                 this._constants.KEYBOARD_BARS_LENGTH
