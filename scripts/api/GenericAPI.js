@@ -39,7 +39,6 @@ class GenericAPI {
                 PINK: 0x9428b5,
             },
         };
-
         this._stages = {
             MEDIUM: 0.6,
             LOW: 0.3,
@@ -50,94 +49,103 @@ class GenericAPI {
     }
 
     /**
+     * Returns a JSON with all the color constants used
      *
-     * @param baseColor {string | number} - used to overwrite the base color, leave empty for default
-     * @return {string | number}
-     * @private
+     * @return {{string} | {number}}
+     * @protected
      */
-    _getBaseColor(baseColor) {
-        const {FOUNDRY_ORANGE} = this._getColors();
+    getColors() {
+        return this._colors[this._colorType];
+    }
+
+    /**
+     *
+     * @param {string | number} [baseColor] - used to overwrite the base color
+     * @return {string | number}
+     * @protected
+     */
+    getBaseColor(baseColor) {
+        const {FOUNDRY_ORANGE} = this.getColors();
         return baseColor || FOUNDRY_ORANGE;
     }
 
     /**
-     * Returns a JSON with all the color constants used
      *
-     * @return {{string} | {number}}
-     * @private
+     * @param {string | number} [emptyColor] - used to overwrite the empty color
+     * @return {string | number}
+     * @protected
      */
-    _getColors() {
-        return this._colors[this._colorType];
+    getEmptyColor(emptyColor) {
+        const {BLACK} = this.getColors();
+        return emptyColor || BLACK;
     }
 
     /**
      * Returns a color for the 3 states a bar can have {LOW, MEDIUM, HIGH}
      *
-     * @param current {number} - the current value for a bar
-     * @param max {number} - the max value that bar can get
-     * @param colors {*} - a JSON with the colors that should be used, it needs to have the following structure
+     * @param {number} current - the current value for a bar
+     * @param {number} max - the max value that bar can get
+     * @param {*} colors - a JSON with the colors that should be used, it needs to have the following structure
      *                     {HIGH: {number | string}, MEDIUM: {number | string},  LOW: {number | string}}
      * @return {number | string}
-     * @private
+     * @protected
      */
-    _getBarColor({current, max}, colors) {
-        if (current < max * this._stages.LOW) return colors.LOW;
-        if (current < max * this._stages.MEDIUM) return colors.MEDIUM;
+    getBarColor({current, max}, colors) {
+        if (current <= max * this._stages.LOW) return colors.LOW;
+        if (current <= max * this._stages.MEDIUM) return colors.MEDIUM;
         return colors.HIGH;
     }
 
     /**
      * Get the color for the first bar
      *
-     * @param bar {*} - the first bar, should contain {current, max}
-     * @param colors {*} - used if you want to overwrite the colors, if not uses the default
-     *                     foundry colors for bar 1
+     * @param {*} bar - the first bar, should contain {current, max}
+     * @param {*} [colors] - used if you want to overwrite the colors
      * @return {number|string}
-     * @private
+     * @protected
      */
-    _getBar1Color(bar, colors) {
-        const defaultColors = this._getColors();
+    getBar1Color(bar, colors) {
+        const defaultColors = this.getColors();
         const stageColors = {
             LOW: colors?.LOW || defaultColors.RED,
             MEDIUM: colors?.MEDIUM || defaultColors.YELLOW,
             HIGH: colors?.HIGH || defaultColors.GREEN,
         };
 
-        return this._getBarColor(bar, stageColors);
+        return this.getBarColor(bar, stageColors);
     }
 
     /**
      * Get the color for the second bar
      *
-     * @param bar {*} - the second bar, should contain {current, max}
-     * @param colors {*} - used if you want to overwrite the colors, if not uses the default
-     *                     foundry colors for bar 2
+     * @param {*} bar - the second bar, should contain {current, max}
+     * @param {*} [colors] - used if you want to overwrite the colors
      * @return {number|string}
-     * @private
+     * @protected
      */
-    _getBar2Color(bar, colors) {
-        const defaultColors = this._getColors();
+    getBar2Color(bar, colors) {
+        const defaultColors = this.getColors();
         const stageColors = {
             LOW: colors?.LOW || defaultColors.PINK,
             MEDIUM: colors?.MEDIUM || defaultColors.PURPLE,
             HIGH: colors?.HIGH || defaultColors.BLUE,
         };
 
-        return this._getBarColor(bar, stageColors);
+        return this.getBarColor(bar, stageColors);
     }
 
     /**
      * Returns a color for the 4 states a spell can have {EMPTY, LOW, MEDIUM, HIGH}
      *
-     * @param current {number} - the current number of spell slots left
-     * @param max {number} - the maximum number of spell slots
-     * @param colors {*} - used if you want to overwrite the colors, if not uses the default
+     * @param {number} current - the current number of spell slots left
+     * @param {number} max - the maximum number of spell slots
+     * @param {*} [colors] - used if you want to overwrite the colors
      *
      * @return {number | string}
-     * @private
+     * @protected
      */
-    _getSpellColor({current, max}, colors) {
-        const defaultColors = this._getColors();
+    getSpellColor({current, max}, colors) {
+        const defaultColors = this.getColors();
         const stageColors = {
             EMPTY: colors?.EMPTY || defaultColors.BLACK,
             LOW: colors?.LOW || defaultColors.RED,
@@ -146,8 +154,16 @@ class GenericAPI {
         };
 
         if (current <= max * this._stages.EMPTY) return stageColors.EMPTY;
-        if (current < max * this._stages.LOW) return stageColors.LOW;
-        if (current < max * this._stages.MEDIUM) return stageColors.MEDIUM;
+        if (current <= max * this._stages.LOW) return stageColors.LOW;
+        if (current <= max * this._stages.MEDIUM) return stageColors.MEDIUM;
         return stageColors.HIGH;
     }
+
+    /**
+     * Creates a persistent animation on the keyboard
+     *
+     * @param {*} data - data needed for the animation
+     * @abstract
+     */
+    createConstantAnimation(data) {}
 }

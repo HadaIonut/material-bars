@@ -14,7 +14,7 @@ Hooks.once('ready', async () => {
 
 Hooks.on("controlToken", (controlledToken) => {
     const collectedTokenData = collectData(controlledToken.actor, controlledToken.data);
-    razerAPI.showData(collectedTokenData);
+    razerAPI.createConstantAnimation(collectedTokenData);
 });
 
 Hooks.on("updateToken", (scene, updatedToken) => {
@@ -36,10 +36,10 @@ Hooks.on("updateToken", (scene, updatedToken) => {
     }
 
     const collectedTokenData = collectData(actor, updatedToken, [location, value]);
-    razerAPI.showData(collectedTokenData);
+    razerAPI.createConstantAnimation(collectedTokenData);
 });
 
 Hooks.on("updateActor", (actor, tokenChange) => {
     const collectedTokenData = collectData(actor, actor.data.token);
-    razerAPI.showData(collectedTokenData);
+    razerAPI.createConstantAnimation(collectedTokenData);
 })

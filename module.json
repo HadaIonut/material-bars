@@ -11,6 +11,7 @@
   ],
   "scripts": [
     "/scripts/lib/ChromaSDK.js",
+    "/scripts/api/GenericAPI.js",
     "/scripts/api/RazerChromaAPI.js"
   ],
   "styles": [
