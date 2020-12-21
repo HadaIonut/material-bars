@@ -8,4 +8,4 @@ A module for connecting FoundryVTT to your beloved RGB keyboards!
 
 ### Example
 
-![](https://i.imgur.com/ulJO0Pd.gif[)
+![](https://i.imgur.com/AA7D4PS.gif)
