@@ -4,7 +4,7 @@
   "description": "Razer chroma integration for FoundryVTT",
   "version": "0.0.2",
   "minimumCoreVersion": "0.7.6",
-  "compatibleCoreVersion": "0.7.6",
+  "compatibleCoreVersion": "0.8.0",
   "author": "bmarian, HadaIonut",
   "esmodules": [
     "/scripts/material-bars.js"
