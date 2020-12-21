@@ -17,6 +17,17 @@ const getBarStructure = (actor, location) => {
 
 }
 
+const hasNoCurrentSpells = (spells) => {
+    const spellTypes = Object.keys(spells);
+    spellTypes.splice(spellTypes.indexOf('pact'), 1);
+
+    const remainingSpells = spellTypes.reduce((accumulator, reducer) => spells[accumulator]?.current + spells[reducer]?.current);
+
+    return remainingSpells === 0;
+}
+
+const hasPactMagic = (spells) => spells.pact.current !== 0;
+
 /**
  * So warlock npcs have this very beautiful bug, where they get generated being able to casts spells normally
  * and this beautiful useless function is here to clear that useless info on them
@@ -26,7 +37,7 @@ const getBarStructure = (actor, location) => {
  * @param actor - owner of the spells
  */
 const fixPactMagic = (spells, actor) => {
-    if (!isPlutoniumNpc(actor) || !isWarlockNpc(actor)) return;
+    if (!(hasNoCurrentSpells(spells) && hasPactMagic(spells))) return;
 
     for (let i = 1; i < 10; i++) {
         spells[`spell${i}`].max = 0;
@@ -91,14 +102,16 @@ const getSpells = (actor) => {
  *
  * @param actor - actor in the token
  * @param controlledToken - target token
+ * @param empty
  */
-const collectData = (actor, controlledToken, ) => {
+const collectData = (actor, controlledToken, empty) => {
     const controlledTokenData = {
         bars: {
             bar1: getBarStructure(actor, controlledToken.bar1.attribute),
             bar2: getBarStructure(actor, controlledToken.bar2.attribute)
         },
-        spells: getSpells(actor)
+        spells: getSpells(actor),
+        empty: empty
     };
 
     console.log(controlledTokenData);

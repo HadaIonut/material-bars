@@ -12,8 +12,8 @@ Hooks.once('ready', async () => {
 });
 
 
-Hooks.on("controlToken", (controlledToken) => {
-    const collectedTokenData = collectData(controlledToken.actor, controlledToken.data);
+Hooks.on("controlToken", (controlledToken, selected) => {
+    const collectedTokenData = collectData(controlledToken.actor, controlledToken.data, !selected);
     razerAPI.showData(collectedTokenData);
 });
 
@@ -23,7 +23,7 @@ Hooks.on("updateToken", (scene, updatedToken) => {
         if (storedToken.data._id === updatedToken._id) return storedToken;
     })
 
-    const collectedTokenData = collectData(token.actor, token.data);
+    const collectedTokenData = collectData(token.actor, token.data, false);
     razerAPI.showData(collectedTokenData);
 });
 
@@ -33,6 +33,6 @@ Hooks.on("updateActor", (actor, actorChange) => {
         if (storedToken.data.actorId === actorChange._id) return storedToken;
     })
 
-    const collectedTokenData = collectData(token.actor, token.data);
+    const collectedTokenData = collectData(token.actor, token.data, false);
     razerAPI.showData(collectedTokenData);
 })
