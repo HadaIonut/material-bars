@@ -5,7 +5,24 @@
   "version": "0.0.2",
   "minimumCoreVersion": "0.7.6",
   "compatibleCoreVersion": "0.7.6",
-  "author": "bmarian, HadaIonut",
+  "author": "bmarian, HadaIonut, Moerill",
+  "authors": [
+    {
+      "name": "bmarian",
+      "discord": "Marian#8010",
+      "url": "https://github.com/bmarian"
+    },
+    {
+      "name": "HadaIonut",
+      "discord": "assassinduke#0983",
+      "url": "https://github.com/HadaIonut"
+    },
+    {
+      "name": "Moerill",
+      "url": "https://github.com/Moerill"
+    }
+  ],
+  "manifestPlusVersion": "1.0.0",
   "esmodules": [
     "/scripts/material-bars.js"
   ],
@@ -26,5 +43,11 @@
   ],
   "url": "https://github.com/bmarian/material-bars",
   "manifest": "https://raw.githubusercontent.com/bmarian/material-bars/master/module.json",
-  "download": "https://github.com/bmarian/material-bars/releases/download/0.0.2/module.zip"
+  "download": "https://github.com/bmarian/material-bars/releases/download/0.0.2/module.zip",
+  "media": [
+    {
+      "type" : "icon",
+      "url" : "https://i.imgur.com/o9yjtRy.png"
+    }
+  ]
 }
