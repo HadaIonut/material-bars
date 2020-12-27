@@ -7,7 +7,7 @@ Hooks.once('init', () => {
 });
 
 Hooks.once('ready', async () => {
-    // CONFIG.debug.hooks = true;
+    CONFIG.debug.hooks = true;
 });
 
 
@@ -18,19 +18,16 @@ Hooks.on("controlToken", (controlledToken, selected) => {
 
 Hooks.on("updateToken", (scene, updatedToken) => {
     const allTokens = canvas.tokens.placeables;
-    const token = allTokens.reduce((accumulator,storedToken)=> {
-        if (storedToken.data._id === updatedToken._id) return storedToken;
-    })
+    const token = allTokens.find((storedToken) => storedToken.data._id === updatedToken._id);
 
     const collectedTokenData = collectData(token.actor, token.data, false);
     razerAPI.createConstantAnimation(collectedTokenData);
-});
+})
+;
 
 Hooks.on("updateActor", (actor, actorChange) => {
     const allTokens = canvas.tokens.placeables;
-    const token = allTokens.reduce((accumulator,storedToken)=> {
-        if (storedToken.data.actorId === actorChange._id) return storedToken;
-    })
+    const token = allTokens.find((storedToken) => storedToken.data.actorId === actorChange._id);
 
     const collectedTokenData = collectData(token.actor, token.data, false);
     razerAPI.createConstantAnimation(collectedTokenData);
