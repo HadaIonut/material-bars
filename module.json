@@ -28,6 +28,7 @@
   ],
   "scripts": [
     "/scripts/lib/ChromaSDK.js",
+    "/scripts/lib/node-vibrant/vibrant.min.js",
     "/scripts/api/GenericAPI.js",
     "/scripts/api/RazerChromaAPI.js"
   ],
