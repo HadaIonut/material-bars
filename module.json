@@ -1,10 +1,10 @@
 {
-  "name": "material-bars",
-  "title": "Material Bars",
-  "description": "Razer chroma integration for FoundryVTT",
+  "name": "material-lights",
+  "title": "Material Lights",
+  "description": "Connecting FoundryVTT to your beloved RGB devices!",
   "version": "0.0.2",
   "minimumCoreVersion": "0.7.6",
-  "compatibleCoreVersion": "0.7.6",
+  "compatibleCoreVersion": "0.8.0",
   "author": "bmarian, HadaIonut, Moerill",
   "authors": [
     {
@@ -24,7 +24,7 @@
   ],
   "manifestPlusVersion": "1.0.0",
   "esmodules": [
-    "/scripts/material-bars.js"
+    "/scripts/material-lights.js"
   ],
   "scripts": [
     "/scripts/lib/ChromaSDK.js",
@@ -33,7 +33,7 @@
     "/scripts/api/RazerChromaAPI.js"
   ],
   "styles": [
-    "/styles/material-bars.css"
+    "/styles/material-lights.css"
   ],
   "languages": [
     {
@@ -42,9 +42,9 @@
       "path": "languages/en.json"
     }
   ],
-  "url": "https://github.com/bmarian/material-bars",
-  "manifest": "https://raw.githubusercontent.com/bmarian/material-bars/master/module.json",
-  "download": "https://github.com/bmarian/material-bars/releases/download/0.0.2/module.zip",
+  "url": "https://github.com/bmarian/material-lights",
+  "manifest": "https://raw.githubusercontent.com/bmarian/material-lights/master/module.json",
+  "download": "https://github.com/bmarian/material-lights/releases/download/0.0.2/module.zip",
   "media": [
     {
       "type" : "icon",
