@@ -39,9 +39,8 @@ const hasPactMagic = (spells) => spells.pact.current !== 0;
  * It is not clean in any way, but it somewhat works
  *
  * @param spells - spell structure
- * @param actor - owner of the spells
  */
-const fixPactMagic = (spells, actor) => {
+const fixPactMagic = (spells) => {
     if (!(hasNoCurrentSpells(spells) && hasPactMagic(spells))) return;
 
     for (let i = 1; i < 10; i++) {
@@ -98,7 +97,7 @@ const getSpells = (actor) => {
             }
     })
     delete spells.spell0;
-    fixPactMagic(spells, actor);
+    fixPactMagic(spells);
 
     convertPactMagic(spells);
     clearMistakesInSpellStructure(spells);
@@ -115,7 +114,7 @@ const getSpells = (actor) => {
  * @param empty - true if the keyboard shouldn't display anything, false if it should display data
  */
 const collectData = (actor, controlledToken, empty) => {
-    const controlledTokenData = {
+    return {
         bars: {
             bar1: getBarStructure(actor, controlledToken.bar1.attribute),
             bar2: getBarStructure(actor, controlledToken.bar2.attribute)
@@ -123,8 +122,6 @@ const collectData = (actor, controlledToken, empty) => {
         spells: getSpells(actor),
         empty: empty
     };
-
-    return controlledTokenData;
 }
 
 export {collectData}
