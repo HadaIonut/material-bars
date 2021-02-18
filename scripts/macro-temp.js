@@ -1,4 +1,5 @@
 const v = new Vibrant(game?.scenes?.viewed?.img);
+
 v.getPalette((err, palette) => {
     const {Vibrant, Muted, LightVibrant, LightMuted, DarkVibrant, DarkMuted} = palette;
     console.log(Vibrant, Muted, LightVibrant, LightMuted, DarkVibrant, DarkMuted);

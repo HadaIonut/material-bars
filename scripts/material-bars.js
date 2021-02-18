@@ -1,10 +1,12 @@
 import {collectData} from "./data-colection.js";
 import {addItemToQueue} from "./animationQueing.js";
+import {registerSettings} from "./settings/settings.js";
 
 let razerAPI;
 
 Hooks.once('init', () => {
     razerAPI = new RazerChromaAPI();
+    registerSettings()
 });
 
 Hooks.once('ready', async () => {
