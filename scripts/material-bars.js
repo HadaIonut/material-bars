@@ -1,12 +1,13 @@
 import {collectData} from "./data-colection.js";
 import {addItemToQueue} from "./animationQueing.js";
-import {registerSettings} from "./settings/settings.js";
+import {registerKeyboardEditor, registerSettings} from "./settings/settings.js";
 
 let razerAPI;
 
 Hooks.once('init', () => {
     razerAPI = new RazerChromaAPI();
     registerSettings()
+    registerKeyboardEditor();
 });
 
 Hooks.once('ready', async () => {

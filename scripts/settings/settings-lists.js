@@ -38,116 +38,17 @@ export default {
             }
         }
     ],
-    STATIC_MODE_SETTINGS:[
+    STATIC_MODE_SETTINGS: [
         {
-            key: "backgroundColor",
+            key: "userSetting",
             data: {
-                name: "Keyboard background color",
-                type: String,
-                default: "Placeholder",
+                type: Object,
+                default: {},
                 scope: "client",
-                config: true,
+                config: false,
                 restricted: false
             }
         },
-        {
-            key: "spellFull",
-            data: {
-                name: "Color for when a spell is full: ",
-                type: String,
-                default: "Placeholder",
-                scope: "client",
-                config: true,
-                restricted: false
-            }
-        },
-        {
-            key: "spellMedium",
-            data: {
-                name: "Color for when a spell is at medium: ",
-                type: String,
-                default: "Placeholder",
-                scope: "client",
-                config: true,
-                restricted: false
-            }
-        },
-        {
-            key: "spellLow",
-            data: {
-                name: "Color for when a spell is low: ",
-                type: String,
-                default: "Placeholder",
-                scope: "client",
-                config: true,
-                restricted: false
-            }
-        },
-        {
-            key: "bar1Full",
-            data: {
-                name: "Color for when bar 1 is full: ",
-                type: String,
-                default: "Placeholder",
-                scope: "client",
-                config: true,
-                restricted: false
-            }
-        },
-        {
-            key: "bar1Medium",
-            data: {
-                name: "Color for when bar 1 is at medium: ",
-                type: String,
-                default: "Placeholder",
-                scope: "client",
-                config: true,
-                restricted: false
-            }
-        },
-        {
-            key: "bar1Low",
-            data: {
-                name: "Color for when bar 1 is low: ",
-                type: String,
-                default: "Placeholder",
-                scope: "client",
-                config: true,
-                restricted: false
-            }
-        },
-        {
-            key: "bar2Full",
-            data: {
-                name: "Color for when bar 2 is full: ",
-                type: String,
-                default: "Placeholder",
-                scope: "client",
-                config: true,
-                restricted: false
-            }
-        },
-        {
-            key: "bar2Medium",
-            data: {
-                name: "Color for when bar 2 is at medium: ",
-                type: String,
-                default: "Placeholder",
-                scope: "client",
-                config: true,
-                restricted: false
-            }
-        },
-        {
-            key: "bar2Low",
-            data: {
-                name: "Color for when bar 2 is low: ",
-                type: String,
-                default: "Placeholder",
-                scope: "client",
-                config: true,
-                restricted: false
-            }
-        },
+
     ]
 }
